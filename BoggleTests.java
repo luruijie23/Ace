@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.InvocationTargetException;
@@ -5,13 +6,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 
 import boggle.*;
+=======
+>>>>>>> Stashed changes
 import boggle.Dictionary;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import boggle.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoggleTests {
 
@@ -22,7 +28,7 @@ public class BoggleTests {
         Method method = game.getClass().getDeclaredMethod("findAllWords", Map.class, Dictionary.class, BoggleGrid.class);
         method.setAccessible(true);
 
-        Dictionary boggleDict = new Dictionary("wordlist.txt");
+        Dictionary boggleDict = new Dictionary("boggle/wordlist2.txt");
         Map<String, ArrayList<Position>> allWords = new HashMap<>();
         BoggleGrid grid = new BoggleGrid(4);
         grid.initalizeBoard("RHLDNHTGIPHSNMJO");
@@ -34,9 +40,14 @@ public class BoggleTests {
 
     //Dictionary Test
     @Test
+<<<<<<< Updated upstream
     void containsWord() throws FileNotFoundException {
         Dictionary dict = new Dictionary("./wordlist.txt");
         assertFalse(dict.isPrefix("NIPHRHLDTGHSO"));
+=======
+    void containsWord() {
+        Dictionary dict = new Dictionary("boggle/wordlist2.txt");
+>>>>>>> Stashed changes
         assertTrue(dict.containsWord("ENZYME"));
         assertTrue(dict.isPrefix("pench"));
         assertFalse(dict.isPrefix("aana"));

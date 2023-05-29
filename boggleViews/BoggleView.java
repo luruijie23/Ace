@@ -1,27 +1,48 @@
 package boggleViews;
 
 import boggle.BoggleGame;
+<<<<<<< Updated upstream
+=======
+import boggle.surprise.BadBetException;
+import boggle.surprise.BetMode;
+import boggle.surprise.Bets;
+import boggle.tts.Speaker;
+import boggleViews.themes.LightTheme;
+import boggleViews.themes.NightTheme;
+import boggleViews.themes.Theme;
+import javafx.collections.FXCollections;
+>>>>>>> Stashed changes
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import boggle.tts.Speaker;
+
+import java.util.Objects;
 
 
 public class BoggleView {
-    private BoggleGame game;
+    private final BoggleGame game;
 
     private boolean speakerCheck = false;
 
     private boolean nmIntiated = false;
     private HBox bottomText = new HBox();
+<<<<<<< Updated upstream
     private Speaker speaker = Speaker.getInstance();
    private BorderPane borderPane = new BorderPane();
     private GridPane gridPane = new GridPane();
+=======
+    private final BorderPane borderPane = new BorderPane();
+    private final GridPane gridPane = new GridPane();
+>>>>>>> Stashed changes
     private String choice;
     private String output;
 
@@ -184,6 +205,7 @@ public class BoggleView {
                 BoggleGame.MoveResult res = game.humanMoveOnce(input.getText());
                 input.clear();
 
+<<<<<<< Updated upstream
                 switch (res) {
                     case EMPTY -> {
                         cscoreLabel.setText("Computer Score is: " + game.getcScore());
@@ -211,6 +233,125 @@ public class BoggleView {
                         this.game.endRound();
                         game.sethintAllowed();
                         enter.setOnAction(f ->{if (input.getText().equals("Y")) {
+=======
+        String[] betModes = new String[]{BetMode.CHANCE.toString(), BetMode.MULTIPLIER.toString()};
+
+        ComboBox<String> selectBetMode = new ComboBox<>(FXCollections.observableArrayList(betModes));
+        TextField betInput = new TextField();
+        betInput.setPromptText("Please enter chance from 0 to 1...");
+
+        selectBetMode.setOnAction(e -> {
+            switch (Objects.requireNonNull(BetMode.fromString(selectBetMode.getValue()))) {
+                case CHANCE -> betInput.setPromptText("Please enter chance from 0 to 1...");
+                case MULTIPLIER -> betInput.setPromptText("Please enter your bet amount...");
+            }
+        });
+
+        selectBetMode.setValue(BetMode.CHANCE.toString());
+
+        Button betConfirm = new Button("Try your luck!");
+
+        betConfirm.setOnMouseReleased(e -> {
+            switch (Objects.requireNonNull(BetMode.fromString(selectBetMode.getValue()))) {
+                case CHANCE -> {
+                    if (game.getpScore() < 10) {
+                        text.setText("You score is lower than the minimum amount for the chance bet (10)!");
+                        return; // cant bet on chance if you have < 10 points
+                    }
+                    try {
+                        double chance = Double.parseDouble(betInput.getText());
+                        boolean won = Bets.chance(chance);
+                        game.setpScore(Math.max(0, game.getpScore() - 10));
+                        if (won) {
+                            text.setText("You won!");
+                            game.setpScore(game.getpScore() + (int) (1 / chance) * 10);
+                        } else {
+                            text.setText("You lost.");
+                        }
+                    } catch (NumberFormatException | BadBetException exc) {
+                        betInput.setText("");
+                        text.setText("Bad input!");
+                    }
+                }
+                case MULTIPLIER -> {
+                    try {
+                        int amount = Integer.parseInt(betInput.getText());
+
+                        if (amount > game.getpScore()) {
+                            text.setText("You score is lower than the bet amount!");
+                            return;
+                        }
+
+                        game.setpScore(game.getpScore() - amount);
+                        int new_amount = Bets.multiplier(amount);
+                        game.setpScore(game.getpScore() + new_amount);
+                        text.setText("You won or lost : " + new_amount + " points.");
+                    } catch (NumberFormatException | BadBetException exc) {
+                        betInput.setText("");
+                        text.setText("Bad input!");
+                    }
+                }
+            }
+
+            scoreLabel.setText("Player Score is: " + game.getpScore());
+        });
+
+        surpriseMechanic.setOnMouseReleased(e -> {
+            if (!roundEnded) {
+                SmInstructions(textBottom);
+                betsVisible = !betsVisible;
+
+                selectBetMode.setVisible(betsVisible);
+                betInput.setVisible(betsVisible);
+                betConfirm.setVisible(betsVisible);
+            }
+        });
+
+        selectBetMode.setVisible(false);
+        betInput.setVisible(false);
+        betConfirm.setVisible(false);
+
+        VBox comms = new VBox(selectBetMode, betInput, betConfirm, text, input, enter);
+        comms.setPrefWidth(300);
+        comms.setMaxWidth(280);
+        text.maxWidth(300);
+        comms.setAlignment(Pos.CENTER);
+        comms.setPadding(new Insets(10, 10, 10, 10));
+        borderPane.setRight(comms);
+        enter.setOnMouseReleased(e -> {
+            //calls MoveResult in Boggle to play the game and see what player inputs is valid or not
+            BoggleGame.MoveResult res = game.humanMoveOnce(input.getText());
+            input.clear();
+
+            switch (res) {
+                case EMPTY -> {
+                    cscoreLabel.setText("Computer Score is: " + game.getcScore());
+                    cWordlabel.setText("Computer Words found:" + game.getComputerWords());
+                    cWordlabel.setWrapText(true);
+                    // Check, checks if user intitiated timeRush, will only run on TimeRush mode
+                    if (this.Check) {
+                        int minutes = (int) ((game.getTimeInSeconds(startTime) % 3600) / 60);
+                        int seconds = (int) (game.getTimeInSeconds(startTime) % 60);
+                        this.timerush = "Time Taken: " + String.format(minutes + " minutes and " + seconds + " seconds");
+                        game.scoreMultiplier((minutes * 60) + seconds);
+                        this.Check = false;
+                    }
+                    this.roundEnded = true;
+                    String roundEnd = ("Player found " + game.getpwordCount() + " words this round\nComputer found "
+                            + game.getcwordcount() + " words this round \nPlayer score is " + game.getpScore() +
+                            " this round \nComputer score is " + game.getcScore() + " this round\n" + this.timerush + "\n\nPlay again? Type 'Y' or 'N' ");
+                    text.setText(
+                            roundEnd);
+
+                    speaker.speak(roundEnd);
+
+                    text.wrappingWidthProperty();
+                    // this ends the round so we can tally up the scores
+                    this.game.endRound();
+                    game.sethintAllowed();
+                    enter.setOnMouseReleased(f -> {
+                        if (input.getText().equals("Y")) {
+>>>>>>> Stashed changes
                             input.clear();
                             this.letters = game.initRound();
                             createBoard();
@@ -352,6 +493,7 @@ public class BoggleView {
                 }
             }
 
+<<<<<<< Updated upstream
             //TimeRush instructions
     public void TrInstructions(Text texti){
         String TrInstructions = ("A timer has started, if you finish finding words in under 90 seconds you'll get triple the " +
@@ -360,6 +502,27 @@ public class BoggleView {
         if (speakerCheck){
             speaker.speak(TrInstructions);
         }
+=======
+    //TimeRush instructions
+    public void TrInstructions(Text texti) {
+        String TrInstructions = ("""
+                A timer has started, if you finish finding words in under 90 seconds you'll get triple the points
+                If you finish under 180 seconds you'll get double the points.
+                If you fail to finish under 180 seconds you'll only get base points\s
+                Enter your words quickly!""");
+        texti.setText(TrInstructions);
+
+        speaker.speak(TrInstructions);
+    }
+
+    public void SmInstructions(Text texti){
+        String SmInstructions = ("""
+                Feeling Lucky?
+                Play Multiplier, give some points lets see if they grow or shrink.
+                Play Chance, pay 10 points and see if you gain much more or lose it all""");
+        texti.setText(SmInstructions);
+        speaker.speak(SmInstructions);
+>>>>>>> Stashed changes
     }
 
     // Nightmode, it changes font colors and borderpane and Hbox colors to make a nightmode vibe
