@@ -2,11 +2,8 @@ package boggle;
 
 import java.util.*;
 
-public class BoggleGame {
+public class BoggleController {
 
-    /**
-     * scanner used to interact with the user via console
-     */
     public Scanner scanner;
     /**
      * stores game statistics
@@ -36,10 +33,10 @@ public class BoggleGame {
     /*
      * BoggleGame constructor
      */
-    public BoggleGame() {
+    public BoggleController() {
         this.scanner = new Scanner(System.in);
         this.gameStats = new BoggleStats();
-        TimeRush TR = new TimeRush();
+        new TimeRush();
         this.hint = new Hints(this.gameStats);
     }
 
@@ -53,9 +50,9 @@ public class BoggleGame {
         }
     }
 
-    private Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
+    private final Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
 
-    private BoggleGrid grid = new BoggleGrid(4);
+    private final BoggleGrid grid = new BoggleGrid(4);
 
     public BoggleGrid getGrid() {
         return grid;

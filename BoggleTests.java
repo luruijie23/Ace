@@ -14,7 +14,7 @@ public class BoggleTests {
     //BoggleGame  Test
     @Test
     void findAllWords_small() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        BoggleGame game = new BoggleGame();
+        BoggleController game = new BoggleController();
         Method method = game.getClass().getDeclaredMethod("findAllWords", Map.class, Dictionary.class, BoggleGrid.class);
         method.setAccessible(true);
 

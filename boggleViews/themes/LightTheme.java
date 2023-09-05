@@ -17,3 +17,4 @@ public class LightTheme implements Theme {
         nightmode.setText("NightMode");
     }
 }
+

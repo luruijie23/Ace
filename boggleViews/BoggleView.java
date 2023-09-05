@@ -1,6 +1,6 @@
 package boggleViews;
 
-import boggle.BoggleGame;
+import boggle.BoggleController;
 import boggle.surprise.BadBetException;
 import boggle.surprise.BetMode;
 import boggle.surprise.Bets;
@@ -26,7 +26,7 @@ import java.util.Objects;
 
 
 public class BoggleView {
-    private final BoggleGame game;
+    private final BoggleController game;
 
     private boolean nmIntiated = false;
     private HBox bottomText = new HBox();
@@ -58,7 +58,7 @@ public class BoggleView {
 
     public BoggleView() {
         this.speaker = Speaker.getInstance();
-        this.game = new BoggleGame();
+        this.game = new BoggleController();
     }
 
     Button nightmode;
@@ -273,7 +273,7 @@ public class BoggleView {
         borderPane.setRight(comms);
         enter.setOnMouseReleased(e -> {
             //calls MoveResult in Boggle to play the game and see what player inputs is valid or not
-            BoggleGame.MoveResult res = game.humanMoveOnce(input.getText());
+            BoggleController.MoveResult res = game.humanMoveOnce(input.getText());
             input.clear();
 
             switch (res) {
