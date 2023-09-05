@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 /**
  * Class to hold Position information associated with a BoggleGrid

@@ -1,10 +1,10 @@
 package boggleViews;
 
-import boggle.BoggleController;
-import boggle.surprise.BadBetException;
-import boggle.surprise.BetMode;
-import boggle.surprise.Bets;
-import boggle.tts.Speaker;
+import VisualAdvancedBoggle.BoggleController;
+import VisualAdvancedBoggle.surprise.BadBetException;
+import VisualAdvancedBoggle.surprise.BetMode;
+import VisualAdvancedBoggle.surprise.Bets;
+import VisualAdvancedBoggle.tts.Speaker;
 import boggleViews.themes.LightTheme;
 import boggleViews.themes.NightTheme;
 import boggleViews.themes.Theme;

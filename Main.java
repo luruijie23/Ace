@@ -1,4 +1,4 @@
-import boggle.tts.Speaker;
+import VisualAdvancedBoggle.tts.Speaker;
 import boggleViews.BoggleView;
 import javafx.application.Application;
 import javafx.scene.Scene;

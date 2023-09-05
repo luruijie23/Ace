@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 import java.util.ArrayList;
 import java.util.Map;

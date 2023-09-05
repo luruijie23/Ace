@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 /**
  * Represents the Boggle game board.

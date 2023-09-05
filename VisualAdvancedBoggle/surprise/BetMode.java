@@ -1,4 +1,4 @@
-package boggle.surprise;
+package VisualAdvancedBoggle.surprise;
 
 public enum BetMode {
     MULTIPLIER,

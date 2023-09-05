@@ -5402,7 +5402,7 @@ bogeys
 bogged
 boggiest
 bogging
-boggle
+VisualAdvancedBoggle
 boggled
 boggles
 boggling

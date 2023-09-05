@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class BoggleController {
     private final Hints hint;
     private boolean hintGet;
 
-    public BoggleDictionaryReader boggleDict = new BoggleDictionaryReader("Ace\\boggle\\wordlist.txt");
+    public BoggleDictionaryReader boggleDict = new BoggleDictionaryReader("Ace\\VisualAdvancedBoggle\\DictionaryWords.txt");
     private String Letters;
 
     /**

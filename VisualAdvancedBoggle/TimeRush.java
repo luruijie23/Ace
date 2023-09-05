@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 public class TimeRush {
     private final long startTime;

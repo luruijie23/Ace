@@ -1,4 +1,4 @@
-package boggle.surprise;
+package VisualAdvancedBoggle.surprise;
 
 public class Bets {
     public static boolean chance(double chance) throws BadBetException {

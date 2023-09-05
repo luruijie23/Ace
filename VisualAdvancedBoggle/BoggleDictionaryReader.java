@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

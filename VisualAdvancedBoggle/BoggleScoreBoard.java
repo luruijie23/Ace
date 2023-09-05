@@ -1,4 +1,4 @@
-package boggle;
+package VisualAdvancedBoggle;
 
 import java.util.HashSet;
 import java.util.Set;
