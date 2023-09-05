@@ -1,15 +1,14 @@
 package boggle;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.TreeSet;
 
 /**
- * The Dictionary will contain lists of words that are acceptable for Boggle
+ * The BoggleDictionaryReader will analyze the words in the dictionary text file
  */
-public class Dictionary {
+public class BoggleDictionaryReader {
 
     /**
      * set of legal words for Boggle
@@ -21,28 +20,36 @@ public class Dictionary {
      *
      * @param filename the file containing a list of legal words.
      */
-    public Dictionary(String filename) {
-        String line = "";
-        int wordcount = 0;
-        this.legalWords = new TreeSet<String>();
-        try
-        {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            while ((line = br.readLine()) != null)
-            {
-                if (line.strip().length() > 0) {
-                    legalWords.add(line.strip());
-                    wordcount++;
+    public BoggleDictionaryReader(String filename) {
+        legalWords = new TreeSet<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            int wordCount = 0;
+
+            while ((line = br.readLine()) != null) {
+                // Trim leading and trailing whitespace from the line.
+                line = line.strip();
+
+                if (!line.isEmpty()) {
+                    legalWords.add(line);
+                    wordCount++;
                 }
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e)
-        {
+
+            System.out.println("Initialized " + wordCount + " words in the Dictionary.");
+        } catch (IOException e) {
+            // Handle any IO exception by printing the stack trace.
             e.printStackTrace();
+            throw new RuntimeException("Error reading the dictionary file.");
         }
-        System.out.println("Initialized " + wordcount + " words in the Dictionary.");;
     }
+
+    /**
+     * Get the set of legal words from the dictionary.
+     *
+     * @return A TreeSet containing legal words.
+     */
 
     /*
      * Checks to see if a provided word is in the dictionary.
@@ -50,7 +57,7 @@ public class Dictionary {
      * @param word  The word to check
      * @return  A boolean indicating if the word has been found
      */
-    public boolean containsWord(String word){
+    public boolean hasWord(String word){
         for (String legalWord : legalWords) {
             word = word.toLowerCase();
             if (word.equals(legalWord)) {
@@ -66,7 +73,7 @@ public class Dictionary {
      * @param str  The string to check
      * @return  A boolean indicating if the string has been found as a prefix
      */
-    public boolean isPrefix(String str){
+    public boolean startswith(String str){
         boolean prefix = true;
         for (String legalWord : legalWords) {
             str = str.toLowerCase();

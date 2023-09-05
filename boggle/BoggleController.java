@@ -8,12 +8,12 @@ public class BoggleController {
     /**
      * stores game statistics
      */
-    private final BoggleStats gameStats;
+    private final BoggleScoreBoard gameStats;
 
     private final Hints hint;
     private boolean hintGet;
 
-    public Dictionary boggleDict = new Dictionary("Ace\\boggle\\wordlist.txt");
+    public BoggleDictionaryReader boggleDict = new BoggleDictionaryReader("Ace\\boggle\\wordlist.txt");
     private String Letters;
 
     /**
@@ -35,7 +35,7 @@ public class BoggleController {
      */
     public BoggleController() {
         this.scanner = new Scanner(System.in);
-        this.gameStats = new BoggleStats();
+        this.gameStats = new BoggleScoreBoard();
         new TimeRush();
         this.hint = new Hints(this.gameStats);
     }
@@ -52,9 +52,9 @@ public class BoggleController {
 
     private final Map<String, ArrayList<Position>> allWords = new HashMap<String, ArrayList<Position>>();
 
-    private final BoggleGrid grid = new BoggleGrid(4);
+    private final BoggleBoard grid = new BoggleBoard(4);
 
-    public BoggleGrid getGrid() {
+    public BoggleBoard getGrid() {
         return grid;
     }
 
@@ -83,7 +83,7 @@ public class BoggleController {
         }
 
         if (allWords.containsKey(word.toUpperCase())) {
-            this.gameStats.addWord(word, BoggleStats.Player.Human);
+            this.gameStats.addWord(word, BoggleScoreBoard.Player.Human);
             allWords.remove(word.toUpperCase());
             return MoveResult.WORD_FOUND;
         }
@@ -129,15 +129,15 @@ public class BoggleController {
         return letters.toString();
     }
 
-    private void findAllWords(Map<String,ArrayList<Position>> allWords, Dictionary boggleDict, BoggleGrid boggleGrid) {
-        int rows = boggleGrid.numRows(),
-                cols = boggleGrid.numCols();
+    private void findAllWords(Map<String,ArrayList<Position>> allWords, BoggleDictionaryReader boggleDict, BoggleBoard boggleBoard) {
+        int rows = boggleBoard.numRows(),
+                cols = boggleBoard.numCols();
         boolean[][] locationsVisited = new boolean[rows][cols]; // array to check if position is valid or false
         String word = "";
         for (int row = 0; row < rows; row++) { // loop to go through every grid sqaure to check for all possibilities
             for (int col = 0; col < cols; col++) {
                 ArrayList<Position> list = new ArrayList<Position>();
-                findWord(allWords, boggleDict, boggleGrid, locationsVisited, word, new Position(row, col), list);
+                findWord(allWords, boggleDict, boggleBoard, locationsVisited, word, new Position(row, col), list);
                 // helper function to help find words and navigate word possibilities
             }
         }
@@ -151,29 +151,29 @@ public class BoggleController {
     Then we recursively go through the grid squares above us and beside us and diagnol ones, with the same steps,
     updating our hashmap along the way. Which becomes a hashmap with all possible words on the grid.
      */
-    private void findWord(Map<String, ArrayList<Position>> allWords, Dictionary boggleDict, BoggleGrid boggleGrid,
+    private void findWord(Map<String, ArrayList<Position>> allWords, BoggleDictionaryReader boggleDict, BoggleBoard boggleBoard,
                           boolean[][] locationsVisited, String word, Position pos, ArrayList<Position> list) {
         list.add(pos);
         locationsVisited[pos.getRow()][pos.getCol()] = true; // makes locations true for now, will change to false if
         // found not a prefix in later if statement
-        word = word + boggleGrid.getCharAt(pos.getRow(), pos.getCol()); // adds character from position to word
+        word = word + boggleBoard.getCharAt(pos.getRow(), pos.getCol()); // adds character from position to word
 
-        if (!boggleDict.isPrefix(word)) { // if word isn't a prefix or prefix anymore, it changes its position to false
+        if (!boggleDict.startswith(word)) { // if word isn't a prefix or prefix anymore, it changes its position to false
             // and removes it from the position list
             locationsVisited[pos.getRow()][pos.getCol()] = false;
             list.remove(pos);
             return;
-        } else if (boggleDict.containsWord(word) && word.length() >= 4){
+        } else if (boggleDict.hasWord(word) && word.length() >= 4){
             if (!allWords.containsKey(word)){// if word isn't already in the hashmap it adds it
                 allWords.put(word, new ArrayList<Position>(list));
             }
 
         }
         // recursive step to go through each grid square
-        for (int row = pos.getRow() - 1; row < boggleGrid.numRows() && row < pos.getRow() + 2; row++){
-            for (int col = pos.getCol() - 1; col < boggleGrid.numCols() && col < pos.getCol() + 2; col++){
+        for (int row = pos.getRow() - 1; row < boggleBoard.numRows() && row < pos.getRow() + 2; row++){
+            for (int col = pos.getCol() - 1; col < boggleBoard.numCols() && col < pos.getCol() + 2; col++){
                 if (col > -1 && row > -1 && !locationsVisited[row][col]){
-                    findWord(allWords, boggleDict, boggleGrid, locationsVisited, word, new Position(row, col), list);
+                    findWord(allWords, boggleDict, boggleBoard, locationsVisited, word, new Position(row, col), list);
                 }
             }
         }
@@ -185,7 +185,7 @@ public class BoggleController {
     private void computerMove(Map<String, ArrayList<Position>> all_words) {
         for (String word : all_words.keySet()) {
             if (!this.gameStats.getPlayerWords().contains(word)) {
-                this.gameStats.addWord(word, BoggleStats.Player.Computer);
+                this.gameStats.addWord(word, BoggleScoreBoard.Player.Computer);
             }
         }
     }

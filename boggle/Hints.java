@@ -6,10 +6,10 @@ import java.util.Random;
 
 public class Hints {
 
-    BoggleStats gameStats;
+    BoggleScoreBoard gameStats;
     private String hintWord;
 
-    public Hints(BoggleStats gameStats) {
+    public Hints(BoggleScoreBoard gameStats) {
         this.gameStats = gameStats;
     }
 

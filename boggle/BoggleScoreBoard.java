@@ -4,50 +4,58 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The BoggleStats will contain statsitics related to game play Boggle 
+ * BoggleScoreBoard stores statistics related to Boggle gameplay.
  */
-public class BoggleStats {
+public class BoggleScoreBoard {
 
     /**
-     * set of words the player finds in a given round 
-     */  
+     * The set of words found by the player in the current round.
+     */
     private Set<String> playerWords;
-    /**
-     * set of words the computer finds in a given round 
-     */  
-    private Set<String> computerWords;
-    /**
-     * the player's score for the current round
-     */  
-    private int pScore; 
-    /**
-     * the computer's score for the current round
-     */  
-    private int cScore; 
-    /**
-     * the player's total score across every round
-     */  
-    private int pScoreTotal; 
-    /**
-     * the computer's total score across every round
-     */  
-    private int cScoreTotal; 
-    /**
-     * the average number of words, per round, found by the player
-     */  
-    private double pAverageWords; 
-    /**
-     * the average number of words, per round, found by the computer
-     */  
-    private double cAverageWords; 
-    /**
-     * the current round being played
-     */  
-    private int round; 
 
     /**
-     * enumarable types of players (human or computer)
-     */  
+     * The set of words found by the computer in the current round.
+     */
+    private Set<String> computerWords;
+
+    /**
+     * The player's score for the current round.
+     */
+    private int pScore;
+
+    /**
+     * The computer's score for the current round.
+     */
+    private int cScore;
+
+    /**
+     * The player's total score across every round.
+     */
+    private int pScoreTotal;
+
+    /**
+     * The computer's total score across every round.
+     */
+    private int cScoreTotal;
+
+    /**
+     * The average number of words found by the player per round.
+     */
+    private double pAverageWords;
+
+    /**
+     * The average number of words found by the computer per round.
+     */
+    private double cAverageWords;
+
+    /**
+     * The current round being played.
+     */
+    private int round;
+
+    /**
+     * Enumerates types of players (human or computer).
+     */
     public enum Player {
         Human(),
         Computer();
@@ -56,12 +64,12 @@ public class BoggleStats {
         }
     }
 
-    /* BoggleStats constructor
-     * ----------------------
-     * Sets round, totals and averages to 0.
+    /**
+     * BoggleScoreBoard constructor.
+     * Sets round, totals, and averages to 0.
      * Initializes word lists (which are sets) for computer and human players.
      */
-    public BoggleStats() {
+    public BoggleScoreBoard() {
         this.round = 0;
         this.pScore = 0;
         this.cScore = 0;
@@ -73,17 +81,17 @@ public class BoggleStats {
         this.computerWords = new HashSet<>();
     }
 
-    /* 
+    /**
      * Add a word to a given player's word list for the current round.
-     * You will also want to increment the player's score, as words are added.
+     * Increment the player's score as words are added.
      *
-     * @param word     The word to be added to the list
-     * @param player  The player to whom the word was awarded
+     * @param word   The word to be added to the list.
+     * @param player The player to whom the word was awarded.
      */
     public void addWord(String word, Player player) {
         int score = 0;
-        for (int i = 1; i <= word.length(); i++){
-            if (i >= 4){
+        for (int i = 1; i <= word.length(); i++) {
+            if (i >= 4) {
                 score += 10;
             }
         }
@@ -103,16 +111,15 @@ public class BoggleStats {
         this.pScore = score;
     }
 
-    /* 
+    /**
      * End a given round.
-     * This will clear out the human and computer word lists, so we can begin again.
-     * The function will also update each player's total scores, average scores, and
-     * reset the current scores for each player to zero.
-     * Finally, increment the current round number by 1.
+     * Clear out the human and computer word lists to begin again.
+     * Update each player's total scores, average scores, and reset current scores to zero.
+     * Increment the current round number by 1.
      */
     public void endRound() {
-        this.pAverageWords = (this.playerWords.size() + this.pAverageWords)/(getRound()+1);
-        this.cAverageWords = (this.computerWords.size() + this.cAverageWords)/(getRound()+1);
+        this.pAverageWords = (this.playerWords.size() + this.pAverageWords) / (getRound() + 1);
+        this.cAverageWords = (this.computerWords.size() + this.cAverageWords) / (getRound() + 1);
         this.playerWords = new HashSet<>();
         this.computerWords = new HashSet<>();
         this.pScoreTotal += this.pScore;
@@ -122,25 +129,42 @@ public class BoggleStats {
         this.round += 1;
     }
 
-    /*
-     * @return Set<String> The player's word list
+    /**
+     * Get the player's word list.
+     *
+     * @return The player's word list.
      */
     public Set<String> getPlayerWords() {
         return this.playerWords;
     }
-    public Set<String> getComputerWords() {return this.computerWords;}
 
-    /*
-     * @return int The number of rounds played
+    /**
+     * Get the computer's word list.
+     *
+     * @return The computer's word list.
      */
-    public int getRound() { return this.round; }
+    public Set<String> getComputerWords() {
+        return this.computerWords;
+    }
 
-    /*
-    * @return int The current player score
-    */
+    /**
+     * Get the number of rounds played.
+     *
+     * @return The number of rounds played.
+     */
+    public int getRound() {
+        return this.round;
+    }
+
+    /**
+     * Get the current player score.
+     *
+     * @return The current player score.
+     */
     public int getScore() {
         return this.pScore;
     }
+
     public int getpScore() {
         return pScore;
     }
@@ -160,6 +184,7 @@ public class BoggleStats {
     public int getpwordCount() {
         return playerWords.size();
     }
+
     public int getcwordcount() {
         return computerWords.size();
     }
@@ -167,6 +192,7 @@ public class BoggleStats {
     public double getApwordCount() {
         return this.pAverageWords;
     }
+
     public double getAcwordcount() {
         return this.cAverageWords;
     }

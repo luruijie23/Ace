@@ -1,4 +1,4 @@
-import boggle.Dictionary;
+import boggle.BoggleDictionaryReader;
 import boggle.*;
 import org.junit.jupiter.api.Test;
 
@@ -15,12 +15,12 @@ public class BoggleTests {
     @Test
     void findAllWords_small() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         BoggleController game = new BoggleController();
-        Method method = game.getClass().getDeclaredMethod("findAllWords", Map.class, Dictionary.class, BoggleGrid.class);
+        Method method = game.getClass().getDeclaredMethod("findAllWords", Map.class, BoggleDictionaryReader.class, BoggleBoard.class);
         method.setAccessible(true);
 
-        Dictionary boggleDict = new Dictionary("Ace/wordlist.txt");
+        BoggleDictionaryReader boggleDict = new BoggleDictionaryReader("Ace/wordlist.txt");
         Map<String, ArrayList<Position>> allWords = new HashMap<>();
-        BoggleGrid grid = new BoggleGrid(4);
+        BoggleBoard grid = new BoggleBoard(4);
         grid.initalizeBoard("RHLDNHTGIPHSNMJO");
         Object r = method.invoke(game, allWords, boggleDict, grid);
 
@@ -31,15 +31,15 @@ public class BoggleTests {
     //Dictionary Test
     @Test
     void containsWord() {
-        Dictionary dict = new Dictionary("boggle/wordlist.txt");
-        assertTrue(dict.containsWord("ENZYME"));
-        assertTrue(dict.isPrefix("pench"));
+        BoggleDictionaryReader dict = new BoggleDictionaryReader("boggle/wordlist.txt");
+        assertTrue(dict.hasWord("ENZYME"));
+        assertTrue(dict.startswith("pench"));
     }
 
     //BoggleGrid Test
     @Test
     void setupBoard() {
-        BoggleGrid grid = new BoggleGrid(10);
+        BoggleBoard grid = new BoggleBoard(10);
         String letters = "";
         for (int i = 0; i < 10; i++) {
             letters = letters + "0123456789";
@@ -57,7 +57,7 @@ public class BoggleTests {
     //BoggleStats Test
     @Test
     void endRoundTest() {
-        BoggleStats stats = new BoggleStats();
+        BoggleScoreBoard stats = new BoggleScoreBoard();
         stats.endRound();
         stats.endRound();
         stats.endRound();
